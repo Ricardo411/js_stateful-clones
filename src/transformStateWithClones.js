@@ -16,11 +16,11 @@ function transformStateWithClones(state, actions) {
     } else if (action.type === 'addProperties') {
       currentState = { ...currentState, ...action.extraData };
     } else if (action.type === 'removeProperties') {
-      currentState = Object.fromEntries(
-        Object.entries(currentState).filter(
-          ([key]) => !action.KeysToRemove.includes(key),
-        ),
-      );
+      currentState = { ...currentState };
+      
+      for (const key of action.keysToRemove) {
+        delete currentState[key];
+      }
     }
     stateHistory.push({ ...currentState });
   }
@@ -28,4 +28,4 @@ function transformStateWithClones(state, actions) {
   return stateHistory;
 }
 
-module.exports = transformStateWithClones
+module.exports = transformStateWithClones;
