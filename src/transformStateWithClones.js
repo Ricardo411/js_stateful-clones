@@ -7,9 +7,8 @@
  * @return {Object[]}
  */
 function transformStateWithClones(state, actions) {
-  // write code here
   const stateHistory = [];
-  let currentState = { ...state }; // clona o estado inicial
+  let currentState = { ...state };
 
   for (const action of actions) {
     if (action.type === 'clear') {
@@ -17,17 +16,16 @@ function transformStateWithClones(state, actions) {
     } else if (action.type === 'addProperties') {
       currentState = { ...currentState, ...action.extraData };
     } else if (action.type === 'removeProperties') {
-      // cria uma cópia para não modificar original
-      currentState = { ...currentState };
-
-      for (const key of action.keysToRemove) {
-        delete currentState[key];
-      }
+      currentState = Object.fromEntries(
+        Object.entries(currentState).filter(
+          ([key]) => !action.KeysToRemove.includes(key),
+        ),
+      );
     }
-    stateHistory.push(currentState);
+    stateHistory.push({ ...currentState });
   }
 
   return stateHistory;
 }
 
-module.exports = transformStateWithClones;
+module.exports = transformStateWithClones
